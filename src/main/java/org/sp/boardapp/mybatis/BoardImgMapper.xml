@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardImg">
+
+<!-- DTO안 다른 DTO가 포함되어있다면, 해당 DTO의 레퍼런스 변수명을 통해 property명 접근 -->
+<insert id="insert">
+	insert into board_img(board_img_idx, board_idx, filename)
+	values(seq_board_img.nextval, #{board.board_idx}, #{filename})
+</insert>
+
+</mapper>
