@@ -33,8 +33,11 @@ public class MybatisBoardDAO implements BoardDAO {
 
 	@Override
 	public List selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		SqlSession sqlSession=mybatisConfig.getSqlSession();
+		List list=sqlSession.selectList("Board.selectAll");
+		mybatisConfig.release(sqlSession);
+		
+		return list;
 	}
 
 	@Override

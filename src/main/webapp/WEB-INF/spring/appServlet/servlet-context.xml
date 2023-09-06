@@ -7,7 +7,6 @@
 	
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/p https://www.springframework.org/schema/p/spring-p.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- 각 요청마다 어떤 하위 컨트롤러가 동작할 지 여부에 대한 매핑은 스프링 버전이 올라가면서 본 xml에서 하기보다는 Java Code 안에서 명시함 -->

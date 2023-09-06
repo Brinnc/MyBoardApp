@@ -8,4 +8,9 @@
 	values(seq_board_img.nextval, #{board.board_idx}, #{filename})
 </insert>
 
+<!-- 부모의 FK를 이용해 레코드 가져오기 -->
+<select id="selectByBoardIdx" parameterType="int" resultType="BoardImg">
+	select * from board_img where board_idx=#{boardIdx}
+</select>
+
 </mapper>

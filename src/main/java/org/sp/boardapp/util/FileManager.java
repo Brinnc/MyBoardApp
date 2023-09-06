@@ -31,7 +31,7 @@ public class FileManager {
 		//파일명 만들기
 		String newName=FileManager.createFilename(filename);
 		
-		File file=new File(path+"/hello/"+newName);
+		File file=new File(path+newName);
 		
 		try {
 			mf.transferTo(file);

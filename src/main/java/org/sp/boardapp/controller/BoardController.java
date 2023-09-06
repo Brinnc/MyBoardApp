@@ -13,6 +13,7 @@ import org.sp.boardapp.exception.BoardImgException;
 import org.sp.boardapp.exception.FileException;
 import org.sp.boardapp.model.board.BoardService;
 import org.sp.boardapp.util.FileManager;
+import org.sp.boardapp.util.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,13 +44,21 @@ public class BoardController {
 	@Autowired
 	private FileManager fileManager;
 
+	@Autowired
+	private Pager pager;
+	
 	//게시판 목록 요청 처리
 	@RequestMapping(value="/board/list", method=RequestMethod.GET)
-	public ModelAndView getList() {
+	public ModelAndView getList(HttpServletRequest request) {
 		//3단계)
+		List boardList=boardService.selectAll();
 		
 		//4단계) 목록 저장
+		pager.init(boardList, request);
+		
 		ModelAndView mav=new ModelAndView("board/list");
+		mav.addObject("boardList", boardList); //요청 객체에 boardList 저장
+		mav.addObject("pager", pager); //요청 객체에 pager 저장->포워딩
 		
 		return mav;
 	}
@@ -63,7 +72,7 @@ public class BoardController {
 	
 	//글쓰기 요청 처리
 	@RequestMapping(value="/board/regist", method=RequestMethod.POST)
-	public ModelAndView regist(Board board, HttpServletRequest request) {
+	public String regist(Board board, HttpServletRequest request) {
 		//3단계)  DB(오라클)에 게시글 등록+파일 업로드
 		System.out.println("title = "+board.getTitle());
 		System.out.println("writer = "+board.getWriter());
@@ -87,7 +96,7 @@ public class BoardController {
 			
 			BoardImg boardImg=new BoardImg(); //empty
 			boardImg.setBoard(board); //이 시점의 DTO엔 아직 board_idx는 채워지지 않음
-			boardImg.setFilename(filename);
+			boardImg.setFilename(name); //새로 바뀐 이름으로 대체
 			
 			imgList.add(boardImg); 
 		}
@@ -121,7 +130,7 @@ public class BoardController {
 		}
 		*/
 		
-		return null;
+		return "redirect:/board/list"; //상위인 DispatcherServlet이 ViewResolver를 이용해 해석함
 	}
 	
 	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성

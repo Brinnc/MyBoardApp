@@ -1,5 +1,12 @@
+<%@page import="org.sp.boardapp.domain.BoardImg"%>
+<%@page import="org.sp.boardapp.domain.Board"%>
+<%@page import="java.util.List"%>
+<%@page import="org.sp.boardapp.util.Pager"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
-
+<%
+	Pager pager=(Pager)request.getAttribute("pager"); 
+	List<Board> boardList=(List)request.getAttribute("boardList");
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +26,7 @@
 	color="#111" />
 
 
-<title>CodePen - Responsive Table</title>
+<title>My Board</title>
 
 <%@ include file="./inc/top_link.jsp" %>
 
@@ -123,11 +130,20 @@ table td.r, table th.r {
 	}
 }
 
+a{
+	text-decoration: none;
+	text-align: center;
+	color: gray;
+}
+
 body {
 	background: #ffffff;
 	font: 400 14px "Calibri", "Arial";
 	padding: 20px;
+	text-align: center;
 }
+
+
 
 </style>
 <%@ include file="./inc/head_link.jsp" %>
@@ -148,14 +164,13 @@ function registForm() {
 
 </head>
 
-<body translate="no">
+<body translate="no" class="sidebar-closed sidebar-collapse">
 
+	<div id="navi_wrapper">
 		<!-- Navbar -->
 			<%@ include file="./inc/top_navi.jsp" %>
 		<!-- /.navbar -->
-		
-		<!-- Main Sidebar Container -->
-		
+	</div>
 
 	<table>
 		<thead>
@@ -168,34 +183,21 @@ function registForm() {
 			</tr>
 		<thead>
 		<tbody>
+			<%int num=pager.getNum(); %>
+			<%int curPos=pager.getCurPos(); //페이지 당 List의 시작 index값 %>
+			<%for(int i=1; i<pager.getPageSize(); i++){ %>
+			<%if(num<1)break; %>
+			<% Board board=boardList.get(curPos++); %>
+			<% //BoardImg boardImg=board.getBoardImgList().get(0); %>
 			<tr>
-				<td>1</td>
+				<td><%=num-- %></td>
 				<td>테스트공지제목</td>
 				<td>작성자</td>
 				<td>23.09.05</td>
 				<td>0</td>
 			</tr>
-			<tr>
-				<td>1</td>
-				<td>테스트공지제목</td>
-				<td>작성자</td>
-				<td>23.09.05</td>
-				<td>0</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>테스트공지제목</td>
-				<td>작성자</td>
-				<td>23.09.05</td>
-				<td>0</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>테스트공지제목</td>
-				<td>작성자</td>
-				<td>23.09.05</td>
-				<td>0</td>
-			</tr>
+			<%} %>
+			
 			
 			<!--  
 			<tr colspan="5">
@@ -205,9 +207,42 @@ function registForm() {
 			</tr>
 			-->
 			
+			<!-- paging 
+			<tr>
+				<td></td>
+				<td></td>
+				<td>
+					
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+			-->
+		
 		</tbody>
+			
 		</table>
-
+		
+		<!-- paging -->
+			<br><br>
+			
+			<%if(pager.getFirstPage()-1<1){ %>
+				<a href="javascript:alert('첫번째 페이지');">◀️</a>
+			<%}else{ %>
+				<a href="/board/list?currentPage=<%=pager.getFirstPage()-1%>">◀️</a>
+			<%} %>
+					
+			<%for(int i=pager.getFirstPage(); i<=pager.getLastPage(); i++){ %>	
+			<%if(i>pager.getTotalPage())break; %>
+				<a href="/board/list?currentPage=<%=i%>">[<%=i %>]	</a>	
+			<%} %>
+					
+			<%if(pager.getLastPage()+1>pager.getTotalPage()){ %>
+				<a href="javascript:alert('마지막 페이지');">▶️</a>
+			<%}else{ %>
+				<a href="/board/list?currentPage=<%=pager.getLastPage()+1%>">▶️</a>
+			<%} %>
+		<!-- /paging -->
 
 		<%@ include file="./inc/bottom_link.jsp" %>
 

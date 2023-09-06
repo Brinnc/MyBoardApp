@@ -12,7 +12,7 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-<title>board</title>
+<title>My Board</title>
 <script>
 
 	function regist() {
@@ -50,7 +50,17 @@ body {
 
 button[type=button]{
 	background-color: #71F9C7;
-	
+	color: black;
+	display: block;	
+	margin: auto;
+	margin-top: 10px;
+	width: 100%;
+	border: none;
+
+}
+
+#photo2{
+	visibility: hidden;
 }
 
 </style>
@@ -60,47 +70,47 @@ button[type=button]{
 <body>
 
 	<!-- Navbar -->
-		<%@ include file="./inc/top_navi.jsp" %>
+		
 	<!-- /.navbar -->
 
 	<article>
 
 		<div class="container" role="main">
 
-			<h2>board Form</h2>
+			<h2 class="text-center">📝notice</h2>
 
 			<form name="form" id="form" role="form" method="post" action="${pageContext.request.contextPath}/board/saveBoard">
 
 				<div class="mb-3">
-					<label for="title">제목</label>
+					<label for="title">title.</label>
 					<input type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
 				</div>
 
 				<div class="mb-3">
-					<label for="writer">작성자</label>
+					<label for="writer">writer.</label>
 					<input type="text" class="form-control" name="writer" id="writer" placeholder="이름을 입력해 주세요">
 				</div>
 
 				<div class="mb-3">
-					<label for="content">내용</label>
+					<label for="content">content.</label>
 					<textarea class="form-control" rows="5" name="content" id="content" placeholder="내용을 입력해 주세요" ></textarea>
 				</div>
 
 				<div class="mb-3">
-					<label for="file">첨부파일</label>
+					<label for="file">image.</label>
 					<input type="file" class="form-control" name="photo" id="photo">
 					<br>
-					<input type="file" class="form-control" name="photo" id="photo">
+					<input type="file" class="form-control" name="photo" id="photo2">
 					<p>
 				</div>
 
 			</form>
 
-			<div >
+			<div id=bt_wrapper>
 
-				<button type="button" class="btn btn-sm btn-primary" id="bt_save">저장</button>
+				<button type="button" class="btn btn-sm btn-primary" id="bt_save">s a v e</button>
 
-				<button type="button" class="btn btn-sm btn-primary" id="bt_list">목록</button>
+				<button type="button" class="btn btn-sm btn-primary" id="bt_list">l i s t</button>
 
 			</div>
 

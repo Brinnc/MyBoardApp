@@ -2,14 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
 
-<!-- 레코드 1건 등록 -->
-<insert id="insert" parameterType="Board">
-	insert into board(board_idx, title, writer, content)
-	values(seq_board.nextval, #{title}, #{writer}, #{content})
+	<!-- 레코드 1건 등록 -->
+	<insert id="insert" parameterType="Board">
+		insert into board(board_idx, title, writer, content)
+		values(seq_board.nextval, #{title}, #{writer}, #{content})
+
+		<selectKey keyColumn="board_idx" keyProperty="board_idx"
+			resultType="int" order="AFTER">
+			select seq_board.currval as board_idx from dual
+		</selectKey>
+	</insert>
+
+	<!-- 모든 게시물 가져오기 릴레이션 상 자식인 BoardImg테이블의 레코드도 함께 가져오기 위해선, 
+	자동매핑이 아닌 resultMap을 이용해 수동 매핑이 필요 -->
+	<resultMap type="Board" id="boardMap">
+		<id column="board_idx" property="board_idx" />
+		<result column="title" property="title" />
+		<result column="writer" property="writer" />
+		<result column="regdate" property="regdate" />
+		<result column="hit" property="hit" />
+		<result column="content" property="content" />
+		
+		<collection column="board_idx" property="boardImgList" javaType="java.util.List"
+		ofType="BoardImg" select="BoardImg.selectByBoardIdx" />
+		
+	</resultMap>
 	
-	<selectKey keyColumn="board_idx" keyProperty="board_idx" resultType="int" order="AFTER">
-		select seq_board.currval as board_idx from dual
-	</selectKey>
-</insert>
+	<select id="selectAll" resultMap="boardMap">
+		select * from board order by board_idx desc
+	</select>
 
 </mapper>
