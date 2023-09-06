@@ -3,32 +3,30 @@ package org.sp.boardapp.model.board;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.sp.boardapp.domain.Board;
-import org.sp.boardapp.exception.BoardException;
+import org.sp.boardapp.domain.BoardImg;
+import org.sp.boardapp.exception.BoardImgException;
 import org.sp.boardapp.mybatis.MybatisConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MybatisBoardDAO implements BoardDAO {
+public class MybatisBoardImgDAO implements BoardImgDAO {
 	
 	@Autowired
 	private MybatisConfig mybatisConfig;
 	
 	@Override
-	public void insert(Board board) throws BoardException{
+	public void insert(BoardImg boardImg) throws BoardImgException{
 		SqlSession sqlSession=mybatisConfig.getSqlSession();
 		
-		int result=sqlSession.insert("Board.insert", board);
+		int result=sqlSession.insert("BoardImg.insert", boardImg);
 		sqlSession.commit(); //DML
 		mybatisConfig.release(sqlSession);
 		
-		//result=0; //에러test용
-		
 		if(result==0) {
-			//글 작성 실패 시 에러
-			throw new BoardException("Fail !");
+			throw new BoardImgException("등록 실패 !");
 		}
+		
 	}
 
 	@Override
@@ -38,19 +36,19 @@ public class MybatisBoardDAO implements BoardDAO {
 	}
 
 	@Override
-	public Board select(int board_idx) {
+	public BoardImg select(int board_img_idx) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void update(Board board) {
+	public void update(BoardImg boardImg) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(int board_idx) {
+	public void delete(int board_img_idx) {
 		// TODO Auto-generated method stub
 		
 	}

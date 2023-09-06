@@ -3,9 +3,13 @@
 <mapper namespace="Board">
 
 <!-- 레코드 1건 등록 -->
-<insert id="insert">
+<insert id="insert" parameterType="Board">
 	insert into board(board_idx, title, writer, content)
 	values(seq_board.nextval, #{title}, #{writer}, #{content})
+	
+	<selectKey keyColumn="board_idx" keyProperty="board_idx" resultType="int" order="AFTER">
+		select seq_board.currval as board_idx from dual
+	</selectKey>
 </insert>
 
 </mapper>

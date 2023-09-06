@@ -1,14 +1,21 @@
 package org.sp.boardapp.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.sp.boardapp.domain.Board;
+import org.sp.boardapp.domain.BoardImg;
+import org.sp.boardapp.exception.BoardException;
+import org.sp.boardapp.exception.BoardImgException;
+import org.sp.boardapp.exception.FileException;
+import org.sp.boardapp.model.board.BoardService;
 import org.sp.boardapp.util.FileManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +24,24 @@ import org.springframework.web.servlet.ModelAndView;
 //게시판과 관련된 요청을 처리하는 하위 컨트롤러
 @Controller
 public class BoardController {
+	
+	//컨트롤러가 직접 DAO를 다루게 되면, 트랜잭션 처리까지 부담한다거나
+	//모델part 업무를 너무 전문적으로 처리하게 되는데
+	//이 경우, 컨트롤러와 모델의 업무 경계가 모호해짐 
+	//즉 코드의 분리가 되지 않아 추후 비슷한 업무 시 코드의 재사용성이 떨어짐
+	@Autowired
+	private BoardService boardService;
+	
+	/*
+	//DI를 이용해 느슨하게 보유
+	@Autowired
+	private BoardDAO boardDAO;
+	@Autowired
+	private BoardImgDAO boardImgDAO;
+	*/
+	
+	@Autowired
+	private FileManager fileManager;
 
 	//게시판 목록 요청 처리
 	@RequestMapping(value="/board/list", method=RequestMethod.GET)
@@ -53,27 +78,83 @@ public class BoardController {
 		String path=context.getRealPath("/resources/data/");
 		System.out.println("파일이 저장될 풀 경로는 "+path);
 		
+		//새로 생성한 파일명을 누적하는 리스트
+		List<BoardImg> imgList=new ArrayList<BoardImg>();
+		
 		for(int i=0; i<photo.length; i++) {
 			String filename=photo[i].getOriginalFilename();
-			System.out.println(filename);
+			String name=fileManager.save(path, filename, photo[i]);
 			
-			//파일명 만들기
-			String newName=FileManager.createFilename(filename);
-			File file=new File(path+newName);
-			try {
-				photo[i].transferTo(file);
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {		
-				e.printStackTrace();
-			}
+			BoardImg boardImg=new BoardImg(); //empty
+			boardImg.setBoard(board); //이 시점의 DTO엔 아직 board_idx는 채워지지 않음
+			boardImg.setFilename(filename);
 			
+			imgList.add(boardImg); 
 		}
 		
-		//메모리 상에 올라온 파일들을 서버의 지정된 디렉토리에 저장(업로드)
+		//BoardDTO에 BoardImg들을 생성하여 List로 넣어둠
+		board.setBoardImgList(imgList);
 		
-		//게시판 리스트 재요청
+		//서비스에서 예외 발생 시, 스프링의 컨트롤러는 예외를 감지하는 이벤트가 발생함
+		//이때 이 이벤트를 처리할 수 있는 메서드를 정의해놓고 개발자가 알맞는 에러페이지 및 메세지를 구성
+		boardService.regist(board); //게시글 등록 요청
+		
+		/*
+		//Board테이블 insert
+		//아직 DTO의 board_idx가 채워지지 않은 0인 상태
+		System.out.println("DAO동작 전 board_idx: "+board.getBoard_idx());
+		
+		boardDAO.insert(board);
+		
+		//이 시점부터 DTO의 board_idx가 가장 최신의 시퀀스값으로 채워짐
+		System.out.println("DAO동작 후 board_idx: "+board.getBoard_idx());
+		
+		//BoardImg테이블 insert
+		//+업로드한 이미지 수만큼 insert
+		for(String name : nameList) {
+		BoardImg boardImg=new BoardImg();
+		
+		boardImg.setBoard(board); //부모pk담기
+		boardImg.setFilename(name); //이미지명
+		
+		boardImgDAO.insert(boardImg);
+		}
+		*/
+		
 		return null;
 	}
+	
+	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성
+		@ExceptionHandler(FileException.class)
+		public ModelAndView handle(FileException e) {
+			//jsp에서 에러 메세지 출력, 따라서 요청이 유지되어야 함(저장)
+			ModelAndView mav=new ModelAndView();
+			mav.addObject("e", e); //에러 객체 저장
+			mav.setViewName("error/result");
+			
+			return mav;
+		}
+	
+	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성
+	@ExceptionHandler(BoardException.class)
+	public ModelAndView handle(BoardException e) {
+		//jsp에서 에러 메세지 출력, 따라서 요청이 유지되어야 함(저장)
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("e", e); //에러 객체 저장
+		mav.setViewName("error/result");
+		
+		return mav;
+	}
+	
+	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성
+		@ExceptionHandler(BoardImgException.class)
+		public ModelAndView handle(BoardImgException e) {
+			//jsp에서 에러 메세지 출력, 따라서 요청이 유지되어야 함(저장)
+			ModelAndView mav=new ModelAndView();
+			mav.addObject("e", e); //에러 객체 저장
+			mav.setViewName("error/result");
+			
+			return mav;
+		}
 
 }

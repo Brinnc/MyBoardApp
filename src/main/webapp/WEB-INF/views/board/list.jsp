@@ -33,7 +33,7 @@ table {
 	background: white;
 	border-radius: 6px;
 	overflow: hidden;
-	max-width: 1000px;
+	max-width: 100%;
 	width: 100%;
 	margin: 0 auto;
 	position: relative;
@@ -131,14 +131,20 @@ body {
 
 </style>
 <%@ include file="./inc/head_link.jsp" %>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $(function(){
 	$("button").click(function(){
 		location.href="/board/registform";
 	});
 	
 });
-</script>
+
+function registForm() {
+	location.href="/board/registform";
+}
+
+
+</script> -->
 
 </head>
 
@@ -191,11 +197,13 @@ $(function(){
 				<td>0</td>
 			</tr>
 			
+			<!--  
 			<tr colspan="5">
 				<td>
 					<button>WRITE</button>				
 				</td>
 			</tr>
+			-->
 			
 		</tbody>
 		</table>

@@ -59,6 +59,10 @@ button[type=button]{
 
 <body>
 
+	<!-- Navbar -->
+		<%@ include file="./inc/top_navi.jsp" %>
+	<!-- /.navbar -->
+
 	<article>
 
 		<div class="container" role="main">
