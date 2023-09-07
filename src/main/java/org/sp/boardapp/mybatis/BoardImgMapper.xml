@@ -18,4 +18,9 @@
 	delete board_img where board_idx=#{board_idx}
 </delete>
 
+<!-- 부모가 있는 레코드의 수정 -->
+<update id="updateByBoardIdx">
+	update 
+</update>
+
 </mapper>

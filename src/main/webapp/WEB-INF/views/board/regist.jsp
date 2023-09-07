@@ -77,27 +77,27 @@ button[type=button]{
 
 		<div class="container" role="main">
 
-			<h2 class="text-center">📝notice</h2>
+			<h2 class="text-center"> 🦖memo </h2>
 
 			<form name="form" id="form" role="form" method="post" action="${pageContext.request.contextPath}/board/saveBoard">
 
 				<div class="mb-3">
-					<label for="title">title.</label>
+					<label for="title">🌿title.</label>
 					<input type="text" class="form-control" name="title" id="title" placeholder="제목을 입력해 주세요">
 				</div>
 
 				<div class="mb-3">
-					<label for="writer">writer.</label>
+					<label for="writer">🌿writer.</label>
 					<input type="text" class="form-control" name="writer" id="writer" placeholder="이름을 입력해 주세요">
 				</div>
 
 				<div class="mb-3">
-					<label for="content">content.</label>
+					<label for="content">💚content.</label>
 					<textarea class="form-control" rows="5" name="content" id="content" placeholder="내용을 입력해 주세요" ></textarea>
 				</div>
 
 				<div class="mb-3">
-					<label for="file">image.</label>
+					<label for="file">🌿image.</label>
 					<input type="file" class="form-control" name="photo" id="photo">
 					<br>
 					<input type="file" class="form-control" name="photo" id="photo2">

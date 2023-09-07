@@ -45,14 +45,15 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public Board select(int board_idx) {
+		boardDAO.updateHit(board_idx);
 		
 		return boardDAO.select(board_idx);
 	}
 
 	@Override
 	public void update(Board board) {
-		// TODO Auto-generated method stub
 		
+		boardDAO.update(board);	
 	}
 
 	@Override
@@ -64,5 +65,7 @@ public class BoardServiceImpl implements BoardService{
 		boardDAO.delete(board_idx);
 		
 	}
+	
+	
 
 }

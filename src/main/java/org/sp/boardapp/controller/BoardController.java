@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.java.swing.plaf.motif.resources.motif;
+
 //게시판과 관련된 요청을 처리하는 하위 컨트롤러
 @Controller
 public class BoardController {
@@ -173,6 +175,19 @@ public class BoardController {
 				
 		//4단계) 리스트 재요청만
 		return "redirect:/board/list";
+	}
+	
+	//수정 요청 처리
+	@RequestMapping(value="/board/edit", method=RequestMethod.POST)
+	public ModelAndView update(Board board) {
+		//3단계)
+		boardService.update(board);
+		
+		//4단계)
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("redirect:/board/content?board_idx="+board.getBoard_idx());
+		
+		return mav;
 	}
 	
 	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성

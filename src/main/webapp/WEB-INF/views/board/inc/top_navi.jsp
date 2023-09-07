@@ -9,10 +9,10 @@
 		-->
 
 		<li class="nav-item d-none d-sm-inline-block"><a href="#"
-			class="nav-link">Sign in</a></li>
+			class="nav-link">🧩Sign in</a></li>
 
 		<li class="nav-item d-none d-sm-inline-block"><a href="#"
-			onclick="registForm()" class="nav-link">Write</a></li>
+			onclick="registForm()" class="nav-link">🖍️Write</a></li>
 
 	</ul>
 

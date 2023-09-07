@@ -27,17 +27,26 @@
 		});
 		$("form").submit();
 	}
+	
+	function edit() {
+		$("form").attr({
+			action: "/board/edit",
+			method: "post"
+			
+		});
+		$("form").submit();
+	}
 
 	$(document).on('click', '#bt_edit', function(e){
 		e.preventDefault();
 		
-		regist();
+		edit();
 	});
 	
 	$(document).on('click', '#bt_del', function(e){
 		e.preventDefault();
 		
-		if(confirm("do you want to delete?")){
+		if(confirm("do you want to delete it?")){
 			//삭제 요청 시 form태그 안에 작성된 파라미터들을 한꺼번에 전송
 			$("form").attr({
 				action: "/board/delete",
@@ -93,7 +102,7 @@ button[type=button]{
 
 		<div class="container" role="main">
 
-			<h2 class="text-center">📝notice (상세페이지보기)</h2>
+			<h2 class="text-center"> 🍀Detail Page </h2>
 
 			<form name="form" id="form" role="form" method="post" action="${pageContext.request.contextPath}/board/saveBoard">
 				<input type="hidden" name="board_idx" value="<%=board.getBoard_idx()%>">
@@ -123,6 +132,7 @@ button[type=button]{
 					<%} %>
 				</div>
 
+				<!-- 
 				<div class="mb-3">
 					<label for="file">image.</label>
 					<input type="file" class="form-control" name="photo" id="photo">
@@ -130,6 +140,7 @@ button[type=button]{
 					<input type="file" class="form-control" name="photo" id="photo2">
 					<p>
 				</div>
+				-->
 
 			</form>
 
