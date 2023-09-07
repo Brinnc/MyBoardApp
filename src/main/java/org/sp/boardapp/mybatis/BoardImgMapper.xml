@@ -13,4 +13,9 @@
 	select * from board_img where board_idx=#{boardIdx}
 </select>
 
+<!-- 부모가 있는 레코드만 삭제 -->
+<delete id="deleteByBoardIdx" parameterType="int">
+	delete board_img where board_idx=#{board_idx}
+</delete>
+
 </mapper>

@@ -42,8 +42,11 @@ public class MybatisBoardDAO implements BoardDAO {
 
 	@Override
 	public Board select(int board_idx) {
-		// TODO Auto-generated method stub
-		return null;
+		SqlSession sqlSession=mybatisConfig.getSqlSession();
+		Board board=sqlSession.selectOne("Board.select", board_idx);
+		mybatisConfig.release(sqlSession);
+		
+		return board;
 	}
 
 	@Override
@@ -53,9 +56,15 @@ public class MybatisBoardDAO implements BoardDAO {
 	}
 
 	@Override
-	public void delete(int board_idx) {
-		// TODO Auto-generated method stub
+	public void delete(int board_idx) throws BoardException{
+		SqlSession sqlSession=mybatisConfig.getSqlSession();
+		int result=sqlSession.delete("Board.delete", board_idx);
+		sqlSession.commit();
+		mybatisConfig.release(sqlSession);
 		
+		if(result<1) { //삭제 실패 시
+			throw new BoardException("cannot DELETE 😶");
+		}
 	}
 
 }

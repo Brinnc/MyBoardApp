@@ -1,5 +1,6 @@
 package org.sp.boardapp.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,14 +92,16 @@ public class BoardController {
 		List<BoardImg> imgList=new ArrayList<BoardImg>();
 		
 		for(int i=0; i<photo.length; i++) {
-			String filename=photo[i].getOriginalFilename();
-			String name=fileManager.save(path, filename, photo[i]);
-			
-			BoardImg boardImg=new BoardImg(); //empty
-			boardImg.setBoard(board); //이 시점의 DTO엔 아직 board_idx는 채워지지 않음
-			boardImg.setFilename(name); //새로 바뀐 이름으로 대체
-			
-			imgList.add(boardImg); 
+			if(photo[i].isEmpty()==false) { //not empty, 즉 업로드가 된 경우
+				String filename=photo[i].getOriginalFilename();
+				String name=fileManager.save(path, filename, photo[i]);
+				
+				BoardImg boardImg=new BoardImg(); //empty
+				boardImg.setBoard(board); //이 시점의 DTO엔 아직 board_idx는 채워지지 않음
+				boardImg.setFilename(name); //새로 바뀐 이름으로 대체
+				
+				imgList.add(boardImg); 
+			}
 		}
 		
 		//BoardDTO에 BoardImg들을 생성하여 List로 넣어둠
@@ -131,6 +134,45 @@ public class BoardController {
 		*/
 		
 		return "redirect:/board/list"; //상위인 DispatcherServlet이 ViewResolver를 이용해 해석함
+	}
+	
+	//상세보기 요청 처리
+	@RequestMapping(value="/board/content", method=RequestMethod.GET)
+	public ModelAndView getContent(int board_idx) {
+		//3단계) 데이터 가져오기
+		Board board=boardService.select(board_idx);
+		
+		//4단계) 데이터(레코드) 저장
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("board", board); //==request.setAttribute()
+		mav.setViewName("board/content");
+		
+		return mav;
+	}
+	
+	//삭제 요청 처리
+	@RequestMapping(value="/board/delete", method=RequestMethod.POST)
+	public String del(int board_idx, String[] filename, HttpServletRequest request) {
+		
+		
+		//3단계) 삭제 처리
+		ServletContext context=request.getSession().getServletContext();
+		
+		
+		//서버에서의 파일 삭제
+		for(String str:filename) {
+			System.out.println("파일명 배열: "+str);
+			
+			//삭제될 파일의 전체 경로 얻기
+			String path=context.getRealPath("/resources/data/"+str);
+			fileManager.remove(path);
+		}
+		
+		//db에서의 삭제
+		boardService.delete(board_idx); 
+				
+		//4단계) 리스트 재요청만
+		return "redirect:/board/list";
 	}
 	
 	//어떠한 예외가 발생했을 때, 어떤 처리를 할지 아래의 메서드에서 로직 작성

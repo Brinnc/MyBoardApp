@@ -45,8 +45,8 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public Board select(int board_idx) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return boardDAO.select(board_idx);
 	}
 
 	@Override
@@ -56,8 +56,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void delete(int board_idx) {
-		// TODO Auto-generated method stub
+	public void delete(int board_idx) throws BoardException, BoardImgException{
+		//게시글 내 이미지에 대한 레코드 삭제
+		boardImgDAO.deleteByBoardIdx(board_idx);
+		
+		//게시글 삭제
+		boardDAO.delete(board_idx);
 		
 	}
 

@@ -52,5 +52,19 @@ public class MybatisBoardImgDAO implements BoardImgDAO {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void deleteByBoardIdx(int board_idx) throws BoardImgException{
+		SqlSession sqlSession=mybatisConfig.getSqlSession();
+		int result=sqlSession.update("BoardImg.deleteByBoardIdx", board_idx);
+		sqlSession.commit();
+		mybatisConfig.release(sqlSession);
+		
+		if(result<1) { //삭제 실패 시
+			throw new BoardImgException("cannot DELETE record of table named Board_img");
+			
+		}
+		
+	}
 
 }

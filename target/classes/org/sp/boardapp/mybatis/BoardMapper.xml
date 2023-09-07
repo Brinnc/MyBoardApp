@@ -28,8 +28,25 @@
 		
 	</resultMap>
 	
+	<sql id="selectSql">
+		select board_idx, title, writer, regdate, hit, content from board
+	</sql>
+	
+	<!-- 게시글 목록 가져오기 -->
 	<select id="selectAll" resultMap="boardMap">
-		select * from board order by board_idx desc
+		<include refid="selectSql" />
+		order by board_idx desc
 	</select>
+	
+	<!-- 게시글 1건 가져오기 -->
+	<select id="select" resultMap="boardMap" parameterType="int">
+		<include refid="selectSql" />
+		where board_idx=#{board_idx}
+	</select>
+	
+	<!-- 게시글 1건 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete board where board_idx=#{board_idx}
+	</delete>
 
 </mapper>

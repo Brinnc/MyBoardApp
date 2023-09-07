@@ -185,16 +185,16 @@ function registForm() {
 		<tbody>
 			<%int num=pager.getNum(); %>
 			<%int curPos=pager.getCurPos(); //페이지 당 List의 시작 index값 %>
-			<%for(int i=1; i<pager.getPageSize(); i++){ %>
+			<%for(int i=1; i<=pager.getPageSize(); i++){ %>
 			<%if(num<1)break; %>
 			<% Board board=boardList.get(curPos++); %>
 			<% //BoardImg boardImg=board.getBoardImgList().get(0); %>
 			<tr>
 				<td><%=num-- %></td>
-				<td>테스트공지제목</td>
-				<td>작성자</td>
-				<td>23.09.05</td>
-				<td>0</td>
+				<td><a href="/board/content?board_idx=<%=board.getBoard_idx()%>"><%=board.getTitle() %></a></td>
+				<td><%=board.getWriter() %></td>
+				<td><%=board.getRegdate() %></td>
+				<td><%=board.getHit() %></td>
 			</tr>
 			<%} %>
 			

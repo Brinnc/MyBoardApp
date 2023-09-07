@@ -44,4 +44,16 @@ public class FileManager {
 		return newName;
 	}
 	
+	//파일 삭제
+	public void remove(String path) throws FileException{
+		
+		File file=new File(path);
+		boolean result=file.delete(); //파일 삭제
+		
+		if(result==false) {
+			throw new FileException("⚠️FAIL : cannot DELETE file");
+		}
+		
+	}
+	
 }
