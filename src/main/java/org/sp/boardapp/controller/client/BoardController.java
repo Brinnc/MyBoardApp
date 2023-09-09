@@ -1,4 +1,4 @@
-package org.sp.boardapp.controller;
+package org.sp.boardapp.controller.client;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +65,8 @@ public class BoardController {
 		
 		return mav;
 	}
+	
+	//로그인 폼 요청
 	
 	//글쓰기 폼 요청
 	@RequestMapping(value="/board/registform", method=RequestMethod.GET)
@@ -160,8 +162,7 @@ public class BoardController {
 		//3단계) 삭제 처리
 		ServletContext context=request.getSession().getServletContext();
 		
-		
-		//서버에서의 파일 삭제
+		//서버에서의 파일 삭제 !! 사진이 없는 글에서는 동작하면 안됨
 		for(String str:filename) {
 			System.out.println("파일명 배열: "+str);
 			

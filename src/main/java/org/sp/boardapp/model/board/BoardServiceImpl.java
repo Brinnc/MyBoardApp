@@ -45,7 +45,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public Board select(int board_idx) {
-		boardDAO.updateHit(board_idx);
+		boardDAO.updateHit(board_idx); //조회수 update 호출
 		
 		return boardDAO.select(board_idx);
 	}
